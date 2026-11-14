@@ -1,0 +1,12 @@
+﻿@model InventoryStatsViewModel
+@{ ViewBag.Title = "Thống kê tồn kho"; }
+<section class="panel">
+    <h2>Thống kê tồn kho</h2>
+    <p class="muted">Các chỉ tiêu được tính bằng LINQ/Entity Framework trên dữ liệu hiện có trong SQL Server.</p>
+    <div class="grid">
+        <div class="panel"><div class="muted">Tổng số sản phẩm</div><div class="metric">@Model.ProductCount</div></div>
+        <div class="panel"><div class="muted">Tổng số đơn vị còn trong kho</div><div class="metric">@Model.TotalQuantity</div></div>
+        <div class="panel"><div class="muted">Sản phẩm sắp hết (1–4)</div><div class="metric">@Model.LowStockCount</div></div>
+    </div>
+    @Html.ActionLink("Xem danh sách", "Index", "Products", null, new { @class = "btn" })
+</section>

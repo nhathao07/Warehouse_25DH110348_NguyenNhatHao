@@ -1,0 +1,30 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewBag.Title - Warehouse 25DH110348</title>
+    <link rel="stylesheet" href="@Url.Content("~/Content/Site.css")" />
+</head>
+<body>
+    <header class="topbar">
+        <h1>QUẢN LÝ KHO HÀNG</h1>
+        <div class="student"><strong>Nguyễn Nhật Hào</strong> · MSSV: <strong>25DH110348</strong></div>
+    </header>
+    <div class="shell">
+        <nav class="sidebar" aria-label="Menu chức năng">
+            @Html.ActionLink("Danh sách sản phẩm", "Index", "Products")
+            @Html.ActionLink("Thêm sản phẩm", "Create", "Products")
+            @Html.ActionLink("Nhập kho / Hàng hỏng", "Index", "Inventory")
+            @Html.ActionLink("Điều chuyển", "Index", "Transfers")
+            @Html.ActionLink("Thống kê tồn kho", "Index", "Reports")
+        </nav>
+        <main>
+            @if (TempData["Message"] != null) { <div class="alert success">@TempData["Message"]</div> }
+            @if (TempData["Error"] != null) { <div class="alert error">@TempData["Error"]</div> }
+            @RenderBody()
+        </main>
+    </div>
+    <footer>Ngày sinh: 20/02/2007</footer>
+</body>
+</html>

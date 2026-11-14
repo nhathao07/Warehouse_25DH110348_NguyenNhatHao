@@ -1,0 +1,27 @@
+﻿@model TransferViewModel
+@{ ViewBag.Title = "Điều chuyển hàng"; }
+<section class="panel">
+    <h2>Điều chuyển giữa hai sản phẩm</h2>
+    <p class="muted">Nguồn và đích phải khác nhau, cùng danh mục và nguồn phải đủ tồn. Cả hai thay đổi trong cùng một transaction.</p>
+    @using (Html.BeginForm(null, null, FormMethod.Post, new { novalidate = "novalidate" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(false, "Không thể điều chuyển:", new { @class = "alert error" })
+        <div class="field"><label for="SourceProductID">Sản phẩm nguồn A</label>@Html.DropDownListFor(m => m.SourceProductID, Model.Products, "Chọn sản phẩm nguồn")@Html.ValidationMessageFor(m => m.SourceProductID)</div>
+        <div class="field"><label for="DestinationProductID">Sản phẩm đích B</label>@Html.DropDownListFor(m => m.DestinationProductID, Model.Products, "Chọn sản phẩm đích")@Html.ValidationMessageFor(m => m.DestinationProductID)</div>
+        <div class="field"><label for="Quantity">Số lượng cần chuyển</label>@Html.TextBoxFor(m => m.Quantity, new { type = "number", min = "1", step = "1" })@Html.ValidationMessageFor(m => m.Quantity)</div>
+        <button type="submit" class="btn">Điều chuyển</button>
+    }
+</section>
+<section class="panel">
+    <h2>Tồn kho sau điều chuyển</h2>
+    <table>
+        <thead><tr><th>ID</th><th>Sản phẩm</th><th>Danh mục</th><th>Số lượng</th></tr></thead>
+        <tbody>
+        @foreach (var p in Model.CurrentStock)
+        {
+            <tr><td>@p.ProductID</td><td>@p.ProductName</td><td>@p.Category</td><td>@p.Quantity</td></tr>
+        }
+        </tbody>
+    </table>
+</section>

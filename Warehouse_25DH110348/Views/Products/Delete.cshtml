@@ -1,0 +1,21 @@
+﻿@model Product
+@{ ViewBag.Title = "Xác nhận xóa"; }
+<section class="panel">
+    <h2>Xác nhận xóa sản phẩm</h2>
+    <p>Sản phẩm: <strong>@Model.ProductName</strong> (ID @Model.ProductID), tồn kho hiện tại: <strong>@Model.Quantity</strong>.</p>
+    @if (Model.Quantity > 0)
+    {
+        <div class="alert error">Từ chối xóa: chỉ sản phẩm có Quantity = 0 mới được xóa. Bản ghi được giữ nguyên.</div>
+    }
+    else
+    {
+        <div class="alert success">Sản phẩm đã hết hàng. Hệ thống yêu cầu bạn xác nhận trước khi xóa.</div>
+    }
+    @using (Html.BeginForm("Delete", "Products", FormMethod.Post, new { novalidate = "novalidate", onsubmit = "return confirm('Bạn chắc chắn muốn xóa sản phẩm này?');" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.Hidden("id", Model.ProductID)
+        @Html.Hidden("confirmed", true)
+        <div class="actions"><button type="submit" class="btn danger">@(Model.Quantity == 0 ? "Xác nhận xóa" : "Gửi yêu cầu xóa để kiểm tra")</button>@Html.ActionLink("Quay lại", "Index", null, new { @class = "btn secondary" })</div>
+    }
+</section>

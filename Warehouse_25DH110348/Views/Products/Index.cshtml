@@ -1,0 +1,40 @@
+﻿@model ProductListViewModel
+@{ ViewBag.Title = "Danh sách sản phẩm"; }
+<section class="panel">
+    <h2>Danh sách sản phẩm trong kho</h2>
+    <p class="muted">Dữ liệu được truy vấn từ SQL Server qua Entity Framework.</p>
+    @using (Html.BeginForm("Index", "Products", FormMethod.Get, new { novalidate = "novalidate" }))
+    {
+        <div class="grid">
+            <div class="field"><label for="category">Danh mục</label>@Html.DropDownListFor(m => m.Category, Model.Categories, "Tất cả danh mục")</div>
+            <div class="field"><label for="fromQuantity">Từ số lượng</label>@Html.TextBoxFor(m => m.FromQuantity, new { type = "number", min = "0" })</div>
+            <div class="field"><label for="toQuantity">Đến số lượng</label>@Html.TextBoxFor(m => m.ToQuantity, new { type = "number", min = "0" })</div>
+            <div class="field"><label for="sortOrder">Sắp xếp số lượng</label>
+                <select id="sortOrder" name="sortOrder">
+                    <option value="quantity_asc" @(Model.SortOrder != "quantity_desc" ? "selected" : "")>Tăng dần</option>
+                    <option value="quantity_desc" @(Model.SortOrder == "quantity_desc" ? "selected" : "")>Giảm dần</option>
+                </select>
+            </div>
+        </div>
+        <div class="actions"><button class="btn" type="submit">Lọc / Sắp xếp</button>@Html.ActionLink("Xóa bộ lọc", "Index", null, new { @class = "btn secondary" })@Html.ActionLink("Thêm sản phẩm", "Create", null, new { @class = "btn" })</div>
+    }
+    @Html.ValidationSummary(false, "", new { @class = "alert error" })
+</section>
+<section class="panel">
+    <table>
+        <thead><tr><th>ID</th><th>Tên sản phẩm</th><th>Danh mục</th><th>Giá</th><th>Số lượng</th><th>Trạng thái</th><th>Thao tác</th></tr></thead>
+        <tbody>
+        @foreach (var p in Model.Products)
+        {
+            var status = p.Quantity == 0 ? "Hết hàng" : p.Quantity <= 4 ? "Sắp hết hàng" : "Còn hàng";
+            var cls = p.Quantity == 0 ? "out" : p.Quantity <= 4 ? "low" : "ok";
+            <tr>
+                <td>@p.ProductID</td><td>@p.ProductName</td><td>@p.Category</td><td>@p.Price.ToString("N2")</td><td>@p.Quantity</td>
+                <td><span class="badge @cls">@status</span></td>
+                <td>@Html.ActionLink("Thử xóa", "Delete", new { id = p.ProductID }, new { @class = "btn small danger" })</td>
+            </tr>
+        }
+        @if (!Model.Products.Any()) { <tr><td colspan="7" class="muted">Không có sản phẩm phù hợp.</td></tr> }
+        </tbody>
+    </table>
+</section>

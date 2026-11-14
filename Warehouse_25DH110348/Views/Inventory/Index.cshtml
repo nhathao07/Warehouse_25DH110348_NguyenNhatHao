@@ -1,0 +1,38 @@
+﻿@model StockAdjustmentViewModel
+@{ ViewBag.Title = "Nhập kho / Hàng hỏng"; }
+<section class="panel">
+    <h2>Nhập kho</h2>
+    @using (Html.BeginForm("Restock", "Inventory", FormMethod.Post, new { novalidate = "novalidate" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(false, "Không thể nhập kho:", new { @class = "alert error" })
+        <div class="field"><label for="ProductID">Sản phẩm</label>@Html.DropDownListFor(m => m.ProductID, Model.Products, "Chọn sản phẩm")@Html.ValidationMessageFor(m => m.ProductID)</div>
+        <div class="field"><label for="Amount">Số lượng nhập (số nguyên dương)</label>@Html.TextBoxFor(m => m.Amount, new { type = "number", min = "1", step = "1" })@Html.ValidationMessageFor(m => m.Amount)</div>
+        <button type="submit" class="btn">Nhập kho</button>
+    }
+</section>
+<section class="panel">
+    <h2>Tồn kho hiện tại</h2>
+    <table>
+        <thead><tr><th>ID</th><th>Sản phẩm</th><th>Danh mục</th><th>Số lượng</th><th>Trạng thái</th></tr></thead>
+        <tbody>
+        @foreach (var p in Model.CurrentStock)
+        {
+            var status = p.Quantity == 0 ? "Hết hàng" : p.Quantity <= 4 ? "Sắp hết hàng" : "Còn hàng";
+            var cls = p.Quantity == 0 ? "out" : p.Quantity <= 4 ? "low" : "ok";
+            <tr><td>@p.ProductID</td><td>@p.ProductName</td><td>@p.Category</td><td>@p.Quantity</td><td><span class="badge @cls">@status</span></td></tr>
+        }
+        </tbody>
+    </table>
+</section>
+<section class="panel">
+    <h2>Ghi nhận hàng hỏng</h2>
+    @using (Html.BeginForm("Damaged", "Inventory", FormMethod.Post, new { novalidate = "novalidate" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(false, "Không thể ghi nhận:", new { @class = "alert error" })
+        <div class="field"><label for="ProductID">Sản phẩm</label>@Html.DropDownListFor(m => m.ProductID, Model.Products, "Chọn sản phẩm")@Html.ValidationMessageFor(m => m.ProductID)</div>
+        <div class="field"><label for="Amount">Số lượng hỏng (số nguyên dương)</label>@Html.TextBoxFor(m => m.Amount, new { type = "number", min = "1", step = "1" })@Html.ValidationMessageFor(m => m.Amount)</div>
+        <button type="submit" class="btn danger">Ghi nhận hàng hỏng</button>
+    }
+</section>

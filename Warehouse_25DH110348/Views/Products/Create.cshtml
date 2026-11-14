@@ -1,0 +1,17 @@
+﻿@model ProductCreateViewModel
+@{ ViewBag.Title = "Thêm sản phẩm"; }
+<section class="panel">
+    <h2>Thêm sản phẩm mới</h2>
+    @using (Html.BeginForm(null, null, FormMethod.Post, new { novalidate = "novalidate" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(false, "Kiểm tra dữ liệu nhập:", new { @class = "alert error" })
+        <div class="field"><label for="ProductName">Tên sản phẩm</label>@Html.TextBoxFor(m => m.ProductName, new { maxlength = "100" })@Html.ValidationMessageFor(m => m.ProductName)</div>
+        <div class="field"><label for="Category">Danh mục</label>@Html.TextBoxFor(m => m.Category, new { maxlength = "100" })@Html.ValidationMessageFor(m => m.Category)</div>
+        <div class="grid">
+            <div class="field"><label for="Price">Giá</label>@Html.TextBoxFor(m => m.Price, new { type = "number", min = "0.01", step = "0.01" })@Html.ValidationMessageFor(m => m.Price)</div>
+            <div class="field"><label for="Quantity">Số lượng</label>@Html.TextBoxFor(m => m.Quantity, new { type = "number", min = "0", step = "1" })@Html.ValidationMessageFor(m => m.Quantity)</div>
+        </div>
+        <div class="actions"><button type="submit" class="btn">Lưu sản phẩm</button>@Html.ActionLink("Quay lại", "Index", null, new { @class = "btn secondary" })</div>
+    }
+</section>
